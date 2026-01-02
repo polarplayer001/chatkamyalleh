@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Chat Overlay</title>
+
+<style>
+/* ===============================
+   CORES (MUDE AQUI)
+   =============================== */
+:root {
+  --bg-geral: #2b1642;           /* fundo externo (pode ser transparente no OBS) */
+  --chat-fundo: #3B1E5A;         /* fundo geral do chat */
+
+  --msg-roxa: #241134;         /* bolha roxa escura */
+  --msg-rosa: #F2B6C6;           /* bolha rosa clara */
+
+  --username-pill: #6B3FA0;      /* fundo do nome */
+  --username-text: #F5F3F7;      /* texto do nome */
+
+  --texto-roxo: #2b1642;         /* texto dentro da msg rosa */
+  --texto-claro: #F5F3F7;        /* texto dentro da msg roxa */
+}
+
+/* ===============================
+   RESET
+   =============================== */
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* ===============================
+   FUNDO
+   =============================== */
+body {
+  background: var(--bg-geral);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===============================
+   CAIXA DO CHAT
+   =============================== */
+.chat-box {
+  width: 420px;            /* MUDE largura aqui */
+  height: 520px;           /* MUDE altura aqui */
+  background: var(--chat-fundo);
+  border-radius: 18px;
+  padding: 14px;
+  overflow: hidden;
+}
+
+/* ===============================
+   ÁREA DAS MENSAGENS
+   =============================== */
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;               /* espaço entre mensagens */
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* ===============================
+   BLOCO DE MENSAGEM
+   =============================== */
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  animation: enter .3s ease-out;
+}
+
+/* ===============================
+   CONTEÚDO DA MSG
+   =============================== */
+.content {
+  max-width: 280px;
+}
+
+
+/* ===============================
+   USERNAME (PILL)
+   =============================== */
+.username {
+  background: var(--username-pill);
+  color: var(--username-text);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px 999px 999px 0;
+  width: fit-content;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+/* ===============================
+   BOLHA DE TEXTO
+   =============================== */
+.bubble {
+  background: var(--msg-roxa);
+  color: var(--texto-claro);
+  padding: 9px 14px;
+  border-radius: 0 16px 16px 16px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+/* ===============================
+   ANIMAÇÃO
+   =============================== */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   SCROLL
+   =============================== */
+.chat::-webkit-scrollbar {
+  width: 6px;
+}
+.chat::-webkit-scrollbar-thumb {
+  background: #6B3FA0;
+  border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="chat-box">
+  <div class="chat" id="chat"></div>
+</div>
+
+<script>
+/* ===============================
+   DADOS FAKE (MUDE AQUI)
+   =============================== */
+const users = ["TESTE1", "TESTE2"];
+const texts = [
+  { text: "Opa, teste teste teste", type: "roxa" },
+  { text: "teste teste teste teste teste teste teste teste teste teste", type: "roxa" },
+  { text: "teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste", type: "roxa" },
+  { text: "teste", type: "roxa" }
+];
+
+const chat = document.getElementById("chat");
+
+/* ===============================
+   CRIA MENSAGEM
+   =============================== */
+function addMessage() {
+  const data = texts[Math.floor(Math.random() * texts.length)];
+
+  const msg = document.createElement("div");
+  msg.className = "message";
+
+  msg.innerHTML = `
+    <div class="content">
+      <div class="username">TESTE</div>
+      <div class="bubble ${data.type}">
+        ${data.text}
+      </div>
+    </div>
+  `;
+
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+
+  if (chat.children.length > 20) {
+    chat.removeChild(chat.children[0]);
+  }
+}
+
+/* ===============================
+   TEMPO ENTRE MENSAGENS
+   =============================== */
+setInterval(addMessage, 1800);
+</script>
+
+</body>
+</html>
